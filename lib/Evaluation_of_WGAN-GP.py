@@ -75,19 +75,19 @@ def evaluate_model_with_trainer(trainer, model, test_loader):
 results = []
 trainer = create_trainer(max_epochs=150, patience=1000, min_delta=1e-4, log_dir="lightning_logs",
                              save_dir="checkpoints", experiment_name=f"heterogcn_fold")
-# 设置参数
+
 path = "H:/Proteomic/"
 files = os.listdir(path)
 matrix = matrix_train
 label_list = label_train
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print("开始评估所有折和所有模型...")
+print("Start Evaluation...")
 print("=" * 80)
 fold = 0
 for train_index, val_index in skf.split(matrix, label_list):
     fold += 1
-    print(f"\n处理第 {fold} 折...")
+    print(f"\n {fold} fold...")
     arg_label0 = pd.read_csv(f'{path}/Aug_data/generated_data_fold{fold}_0.csv')
     arg_label0.index = arg_label0['id']
     arg_label1 = pd.read_csv(f'{path}/Aug_data/generated_data_fold{fold}_1.csv')
