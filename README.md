@@ -80,3 +80,4 @@ Due to the large file size of the raw mass spectrometry data, the complete datas
 * **Subproject ID:** `IPX0013995001`
 * **Access Link:** [iProX Repository](https://www.iprox.cn/page/PSV023.html;?url=1774021395032q4nj) 
 * **Note:** Passwords for reviewer access are provided in the *Reporting Summary* submitted with the manuscript.
+* **Processed Data:** Processed protein expression matrices are currently restricted due to data confidentiality and will be released to the public upon the formal acceptance of the manuscript.
