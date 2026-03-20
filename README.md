@@ -19,11 +19,9 @@ Here, we present the first comprehensive, multi-center proteomic analysis of GAS
 ## Model Architecture
 
 ![WEDGE Architecture](Fig1.png)
-
-WEDGE utilizes a dual-stream Heterogeneous GCN to integrate:
+The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversarial Network with Gradient Penalty) for data augmentation of patient proteomic samples to address data scarcity. Subsequently, it utilizes a dual-stream Heterogeneous GCN to integrate biological priors from:
 1.  **Protein-Protein Interaction (PPI) stream** (String database).
 2.  **Gene Regulatory Network (GRN) stream** (TRRUST database).
-
 ---
 
 ## System Requirements
