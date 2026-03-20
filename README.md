@@ -35,12 +35,11 @@ The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversaria
 * **Dependencies:** (See `requirements.txt` for details)
     * `torch==2.1.0`
     * `pytorch-lightning==2.4.0`
-    * `torch-geometric==2.6.1`
-  
+    * `torch-geometric==2.6.1`  
 ---
 
 ### Core Model Architecture & Training
-* **`WEDGE_model.py`**: The heart of the framework. It defines the `HeteroGCN` and `GraphLevelHeteroGCN` (PyTorch Lightning) classes. It implements the dual-stream heterogeneous graph convolution logic, utilizing `HeteroConv` to process Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) streams.
+* **`WEDGE_model.py`**: It defines the `HeteroGCN` and `GraphLevelHeteroGCN` (PyTorch Lightning) classes. It implements the dual-stream heterogeneous graph convolution logic, utilizing `HeteroConv` to process Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) streams.
 * **`Train.py`**: A wrapper for the PyTorch Lightning trainer. It manages essential training callbacks such as `ModelCheckpoint` for saving weights, `EarlyStopping` to prevent overfitting, and `LearningRateMonitor`.
 ---
 
@@ -58,3 +57,21 @@ The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversaria
 ### Supporting Modules
 * **`lib/checkpoints/`**: Storage for pre-trained model weights (`.ckpt`). The provided checkpoint allows for rapid reproduction of the results reported in the study.
 * **`Compare/`**: Includes benchmark implementations of other biomarker discovery methods for performance comparison.
+---
+
+## Getting Started
+
+To use the WEDGE framework, clone the repository and install the necessary dependencies.
+
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/HuangHan-LabAccount/WEDGE-for-biomarker-discovery.git](https://github.com/HuangHan-LabAccount/WEDGE-for-biomarker-discovery.git)
+cd WEDGE-for-biomarker-discovery
+```
+### 2. Environment Setup
+```bash
+conda create -n wedge_env python=3.8
+conda activate wedge_env
+pip install -r requirements.txt
+```
+
