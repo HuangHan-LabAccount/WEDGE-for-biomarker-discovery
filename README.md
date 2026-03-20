@@ -65,7 +65,7 @@ To use the WEDGE framework, clone the repository and install the necessary depen
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/HuangHan-LabAccount/WEDGE-for-biomarker-discovery.git](https://github.com/HuangHan-LabAccount/WEDGE-for-biomarker-discovery.git)
+git clone https://github.com/HuangHan-LabAccount/WEDGE-for-biomarker-discovery.git
 cd WEDGE-for-biomarker-discovery
 ```
 ### 2. Environment Setup
@@ -74,4 +74,3 @@ conda create -n wedge_env python=3.8
 conda activate wedge_env
 pip install -r requirements.txt
 ```
-
