@@ -19,9 +19,6 @@ Here, we present the first comprehensive, multi-center proteomic analysis of GAS
 ## Model Architecture
 
 ![WEDGE Architecture](Fig1.png)
-The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversarial Network with Gradient Penalty) for data augmentation of patient proteomic samples to address data scarcity. Subsequently, it utilizes a dual-stream Heterogeneous GCN to integrate biological priors from:
-1.  **Protein-Protein Interaction (PPI) stream** (String database).
-2.  **Gene Regulatory Network (GRN) stream** (TRRUST database).
 ---
 
 ## System Requirements
@@ -62,10 +59,25 @@ Due to the large file size of the raw mass spectrometry data, the complete datas
 * **Note:** Passwords for reviewer access are provided in the *Reporting Summary* submitted with the manuscript.
 * **Processed Data:** Processed protein expression matrices are currently restricted due to data confidentiality and will be released to the public upon the formal acceptance of the manuscript.
 ---
+## 4. Core Scripts
 
-### Core Model Architecture & Training
-* **`WEDGE_model.py`**: It defines the `HeteroGCN` and `GraphLevelHeteroGCN` (PyTorch Lightning) classes. It implements the dual-stream heterogeneous graph convolution logic, utilizing `HeteroConv` to process Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) streams.
-* **`Train.py`**: A wrapper for the PyTorch Lightning trainer. It manages essential training callbacks such as `ModelCheckpoint` for saving weights, `EarlyStopping` to prevent overfitting, and `LearningRateMonitor`.
+The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversarial Network with Gradient Penalty) for data augmentation of patient proteomic samples to address data scarcity. Subsequently, it utilizes a dual-stream Heterogeneous GCN to integrate biological priors from:
+1.  **Protein-Protein Interaction (PPI) stream** (String database).
+2.  **Gene Regulatory Network (GRN) stream** (TRRUST database).
+
+The following scripts provide the complete implementation logic of the WEDGE framework as described in the manuscript. They are intended for methodological transparency and reference:
+
+### Model Evaluation (`Evaluation_of_WEDGE.py`)
+* **Usage:** Orchestrates data loading, model initialization, and testing across different folds and cohorts.
+* **Expected Output:** The script is designed to output a detailed evaluation matrix including **Accuracy**, **AUC**, **Sensitivity**, and **Specificity** for the GAS vs. HPV-CA classification task across internal and external validation cohorts.
+
+### Model Training & Checkpoints (`Train.py`)
+* **Usage:** A wrapper for the PyTorch Lightning trainer. It orchestrates the end-to-end training of the dual-stream Heterogeneous GCN, managing callbacks such as `ModelCheckpoint` and `EarlyStopping`.
+* **Expected Output:** Automated logging of real-time metrics (Loss, Accuracy) and saving of the best model weights (`.ckpt`) based on validation loss into the `lib/checkpoints/` directory.
+
+### Model Interpretability (`WEDGE_Explain.py`)
+* **Usage:** Implements the interpretability layer using **Integrated Gradients (IG)** and **Grad-CAM** to rank proteins based on their diagnostic contribution.
+* **Expected Output:** Generates node importance scores, supporting the biological findings and identifying PGC and DNMT1 as the top-ranking diagnostic biomarkers.
 ---
 
 ### Data Engineering & Augmentation
@@ -73,13 +85,6 @@ Due to the large file size of the raw mass spectrometry data, the complete datas
 * **`WGAN-GP/`**: A dedicated module for Wasserstein Generative Adversarial Networks with Gradient Penalty. This is used for clinical data augmentation to address the scarcity of GAS samples.
 * **`PPI_GRN_database/`**: This directory stores the biological prior knowledge databases (e.g., STRING and TRRUST) used to construct the dual-stream graph networks.
 
-
-### Evaluation & Model Interpretability
-* **`Evaluation_of_WEDGE.py`**: The primary script for model evaluation. It orchestrates data loading, model initialization, and testing across different folds and cohorts.
-* **`WEDGE_Explain.py`**: Implements the interpretability layer of the framework. It includes the `NodeImportanceAnalyzer` class, which utilizes **Integrated Gradients (IG)** and **Grad-CAM** to rank proteins based on their diagnostic contribution.
-
-
 ### Supporting Modules
 * **`lib/checkpoints/`**: Storage for pre-trained model weights (`.ckpt`). The provided checkpoint allows for rapid reproduction of the results reported in the study.
 * **`Compare/`**: Includes benchmark implementations of other biomarker discovery methods for performance comparison.
----
