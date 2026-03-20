@@ -59,7 +59,7 @@ Due to the large file size of the raw mass spectrometry data, the complete datas
 * **Note:** Passwords for reviewer access are provided in the *Reporting Summary* submitted with the manuscript.
 * **Processed Data:** Processed protein expression matrices are currently restricted due to data confidentiality and will be released to the public upon the formal acceptance of the manuscript.
 ---
-## 4. Core Scripts
+### 4. Core Scripts
 
 The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversarial Network with Gradient Penalty) for data augmentation of patient proteomic samples to address data scarcity. Subsequently, it utilizes a dual-stream Heterogeneous GCN to integrate biological priors from:
 1.  **Protein-Protein Interaction (PPI) stream** (String database).
