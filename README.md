@@ -74,3 +74,9 @@ conda create -n wedge_env python=3.8
 conda activate wedge_env
 pip install -r requirements.txt
 ```
+### 3. Proteomics Dataset
+Due to the large file size of the raw mass spectrometry data, the complete dataset is hosted externally on the **iProX/ProteomeXchange** consortium:
+* **Project ID:** `IPX0013995000` / `PXD074127`
+* **Subproject ID:** `IPX0013995001`
+* **Access Link:** [iProX Repository](https://www.iprox.cn/page/PSV023.html;?url=1774021395032q4nj) 
+* **Note:** Passwords for reviewer access are provided in the *Reporting Summary* submitted with the manuscript.
