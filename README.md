@@ -53,7 +53,6 @@ pip install -r requirements.txt
 ```
 ### 3. Proteomics Dataset
 
-Due to the large file size of the raw mass spectrometry data, the complete dataset is hosted externally on the **iProX/ProteomeXchange** consortium:
 ### Raw Proteomics Dataset
 Due to the large file size of the raw mass spectrometry data, the complete dataset is hosted externally on the **iProX/ProteomeXchange** consortium:
 * **Project ID:** `IPX0013995000` / `PXD074127`
@@ -72,9 +71,9 @@ The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversaria
 1.  **Protein-Protein Interaction (PPI) stream** (String database).
 2.  **Gene Regulatory Network (GRN) stream** (TRRUST database).
 
-The following scripts provide the complete implementation logic of the WEDGE framework as described in the manuscript. They are intended for methodological transparency and reference:
----
 
+---
+The following scripts provide the complete implementation logic of the WEDGE framework as described in the manuscript. They are intended for methodological transparency and reference:
 ### `01_Train_and_Interpret_WEDGE.py`
 * This is the core engine of our framework. It documents the construction and training of the dual-stream Heterogeneous GCN, integrating Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) biological priors. Crucially, it includes the node importance explainer (using Integrated Gradients) which successfully identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
 
@@ -83,6 +82,10 @@ The following scripts provide the complete implementation logic of the WEDGE fra
 
 ### `03_Evaluate_External_Validation_Cohort.py`
 * This script demonstrates the clinical generalizability of our findings. It evaluates the fixed WEDGE signature (PGC & DNMT1) and baseline models purely on the **independent external multi-center cohort**. It generates key clinical diagnostic metrics, including external ROC curves, PRF (Precision, Recall, F1) scores, and confusion matrices.
+
+> ⚠️ **IMPORTANT WARNING FOR CODE EXECUTION**
+> The scripts provided above are primarily intended to showcase methodological transparency. They currently contain **hardcoded absolute local paths** (e.g., `H:/Proteomic/...`). 
+> If you wish to run these scripts locally using the unzipped `data_for_WEDGE` datasets, you **MUST** manually open the scripts and update all directory path variables (such as `path` and `SAVE_PATH`) to match your local machine's directory structure.
 ---
 ### Model Evaluation (`Evaluation_of_WEDGE.py`)
 * **Usage:** Orchestrates data loading, model initialization, and testing across different folds and cohorts.
