@@ -76,13 +76,13 @@ The following scripts provide the complete implementation logic of the WEDGE fra
 ---
 
 ### `01_Train_and_Interpret_WEDGE.py`
-* **Significance:** This is the core engine of our framework. It documents the construction and training of the dual-stream Heterogeneous GCN, integrating Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) biological priors. Crucially, it includes the node importance explainer (using Integrated Gradients) which successfully identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
+* This is the core engine of our framework. It documents the construction and training of the dual-stream Heterogeneous GCN, integrating Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) biological priors. Crucially, it includes the node importance explainer (using Integrated Gradients) which successfully identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
 
 ### `02_Evaluate_Internal_Test_Cohort.py`
-* **Significance:** This script conducts a comprehensive evaluation on the internal test set. It dynamically assesses diagnostic accuracy across varying numbers of protein signatures and rigorously compares WEDGE against established baseline machine learning models (e.g., Random Forest, DIABLO, BINN, POC19). It also incorporates SHAP (SHapley Additive exPlanations) analysis to interpret the decision-making contribution of the identified biomarkers.
+* This script conducts a comprehensive evaluation on the internal test set. It dynamically assesses diagnostic accuracy across varying numbers of protein signatures and rigorously compares WEDGE against established baseline machine learning models (e.g., Random Forest, DIABLO, BINN, POC19). It also incorporates SHAP (SHapley Additive exPlanations) analysis to interpret the decision-making contribution of the identified biomarkers.
 
 ### `03_Evaluate_External_Validation_Cohort.py`
-* **Significance:** This script demonstrates the clinical generalizability of our findings. It evaluates the fixed WEDGE signature (PGC & DNMT1) and baseline models purely on the **independent external multi-center cohort**. It generates key clinical diagnostic metrics, including external ROC curves, PRF (Precision, Recall, F1) scores, and confusion matrices.
+* This script demonstrates the clinical generalizability of our findings. It evaluates the fixed WEDGE signature (PGC & DNMT1) and baseline models purely on the **independent external multi-center cohort**. It generates key clinical diagnostic metrics, including external ROC curves, PRF (Precision, Recall, F1) scores, and confusion matrices.
 ---
 ### Model Evaluation (`Evaluation_of_WEDGE.py`)
 * **Usage:** Orchestrates data loading, model initialization, and testing across different folds and cohorts.
