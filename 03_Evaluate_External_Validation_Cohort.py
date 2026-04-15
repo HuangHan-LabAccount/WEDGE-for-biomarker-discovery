@@ -1,13 +1,16 @@
 import sys
+import os
 
-sys.path.append('lib/')
+# Get the directory where this script is located
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = SCRIPT_DIR
+
+sys.path.append(os.path.join(PROJECT_ROOT, 'lib/'))
 from utilsdata import *
-from HGCN_Explain import *
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import roc_auc_score
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
-import os
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
@@ -16,6 +19,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
+
+# Data paths - using relative paths from project root
+DEMO_DATA_DIR = os.path.join(PROJECT_ROOT, 'Demo_data')
+PPI_DIR = os.path.join(PROJECT_ROOT, 'PPI_GRN_database')
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, 'output')
 
 colors = ["#E64B34", "#3C5487", "#00A088", "#F4AE64", "#4DBBD6", "#785390", "#F29B80", "#8DD3C6"]
 # RandomForest Merics
@@ -635,12 +643,14 @@ def evaluate_model_CFM(model, X_train, X_test, y_train, y_test, model_name="Mode
 
 
 if True:
-    protein_matrix = load_Stringdatabase(path="H:/Proteomic/PPI_data/Trrust_database/",
+    # Load external PPI/GRN database first for DEgene_selected
+    protein_matrix = load_Stringdatabase(path=os.path.join(PPI_DIR, 'Trrust_database'),
                                          file_name="TF_filtered_human.csv")
-    path = "H:/Proteomic"
-    meta = pd.read_csv(f'{path}/data/hGCN/meta_selected.csv', index_col=0)
-    matrix = pd.read_csv(f'{path}/data/hGCN/expr_selected.csv', index_col=0).T
-    matrix_Degene_sub = DEgene_selected(matrix)
+
+    # Load internal data from Demo_data
+    meta = pd.read_csv(os.path.join(DEMO_DATA_DIR, 'meta_selected.csv'), index_col=0)
+    matrix = pd.read_csv(os.path.join(DEMO_DATA_DIR, 'expr_selected.csv'), index_col=0).T
+    matrix_Degene_sub = DEgene_selected(matrix, deg_path=PPI_DIR)
     matrix = matrix_Degene_sub
     meta_sub = meta[meta.CancerType.isin(['HPV_related', 'NHPV'])]
     matrix_sub = matrix.loc[meta_sub.MS_number, :]
@@ -650,22 +660,22 @@ if True:
     label_all = (torch.tensor(encoder.fit_transform(meta_sub.CancerType.values), dtype=torch.float))
     label_train = (torch.tensor(encoder.fit_transform(meta_train.CancerType.values), dtype=torch.float))
     label_test = (torch.tensor(encoder.fit_transform(meta_test.CancerType.values), dtype=torch.float))
-    protein_matrix_PPI = load_Stringdatabase(path=os.path.join(path, 'PPI_data/String_database/'),
+    protein_matrix_PPI = load_Stringdatabase(path=os.path.join(PPI_DIR, 'String_database'),
                                              file_name="human_PPI_score_Stringdatabase(700up).csv")
-    protein_matrix_GRN = load_Stringdatabase(path=os.path.join(path, 'PPI_data/Trrust_database/'),
+    protein_matrix_GRN = load_Stringdatabase(path=os.path.join(PPI_DIR, 'Trrust_database'),
                                              file_name="TF_filtered_human.csv")
     adj_PPI = getAdjByString(protein_matrix_PPI, matrix_train, one_direction=False)
     adj_GRN = getAdjByString(protein_matrix_GRN, matrix_train, one_direction=True)
     gene_features = torch.tensor(matrix_train.values, dtype=torch.float)
     encoder = LabelEncoder()
-matrix_external= pd.read_csv(f'{path}/data/hGCN/expr_external_GAS_HPVCA.csv', index_col=0).T
-meta_external = pd.read_csv(f'{path}/data/hGCN/meta_external_GAS_HPVCA.csv', index_col=0)
+matrix_external= pd.read_csv(os.path.join(DEMO_DATA_DIR, 'expr_external_GAS_HPVCA.csv'), index_col=0).T
+meta_external = pd.read_csv(os.path.join(DEMO_DATA_DIR, 'meta_external_GAS_HPVCA.csv'), index_col=0)
 label_external = (torch.tensor(encoder.fit_transform(meta_external.CancerType.values), dtype=torch.float))
 
 # ==============================================================================
 # 1. 设置路径与加载外部数据
 # ==============================================================================
-save_path = "H:/Proteomic/ppt/final/metric/fig/fig3/external/"
+save_path = os.path.join(OUTPUT_DIR, "fig/fig3/external/")
 os.makedirs(save_path, exist_ok=True)
 
 try:
@@ -680,7 +690,7 @@ try:
     # ==============================================================================
     # 0. 准备工作：设置路径与基因
     # ==============================================================================
-    save_path = "H:/Proteomic/ppt/final/metric/fig/fig3/external/"
+    save_path = os.path.join(OUTPUT_DIR, "fig/fig3/external/")
     os.makedirs(save_path, exist_ok=True)
 
     # 定义 WEDGE 基因组
