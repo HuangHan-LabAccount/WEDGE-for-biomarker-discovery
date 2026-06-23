@@ -98,7 +98,7 @@ python 00_Evaluation_of_Augdataset.py
 python 01_0_Train_and_Interpret_WEDGE.py
 
 # Step 4: Extract and visualize EMA-smoothed Loss curves from log events
-python 01_1_Visualization_of_WEDGE_loss(Train&Validation).py
+python 01_1_Visualization_of_WEDGE_loss.py
 
 # Step 5: Perform MELT correlation experiments and the non-augmented ablation study
 python 01_2_Melt_WGAN_GP_Experient.py
