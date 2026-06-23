@@ -35,7 +35,6 @@ Here, we present the first comprehensive, multi-center proteomic analysis of GAS
     * `torch-geometric==2.6.1`  
 ---
 
-
 ## Getting Started
 
 To use the WEDGE framework, clone the repository and install the necessary dependencies.
@@ -49,7 +48,7 @@ cd WEDGE-for-biomarker-discovery
 ```bash
 conda create -n wedge_env python=3.8
 conda activate wedge_env
-pip install -r requirements.txt
+pip install -r lib/requirements.txt
 ```
 ### 3. Proteomics Dataset
 
@@ -74,20 +73,46 @@ The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversaria
 
 ---
 The following scripts provide the complete implementation logic of the WEDGE framework as described in the manuscript. They are intended for methodological transparency and reference:
+
 ### `01_Train_and_Interpret_WEDGE.py`
-* This is the core engine of our framework. It documents the construction and training of the dual-stream Heterogeneous GCN, integrating Protein-Protein Interaction (PPI) and Gene Regulatory Network (GRN) biological priors. Crucially, it includes the node importance explainer (using Integrated Gradients) which successfully identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
+* **Purpose:** Train the dual-stream Heterogeneous GCN and identify diagnostic biomarkers using Integrated Gradients.
+* **Output:** Identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
 
 ### `02_Evaluate_Internal_Test_Cohort.py`
-* This script conducts a comprehensive evaluation on the internal test set. It dynamically assesses diagnostic accuracy across varying numbers of protein signatures and rigorously compares WEDGE against established baseline machine learning models (e.g., Random Forest, DIABLO, BINN, POC19). It also incorporates SHAP (SHapley Additive exPlanations) analysis to interpret the decision-making contribution of the identified biomarkers.
+* **Purpose:** Evaluate WEDGE and baseline models (Random Forest, DIABLO, BINN, POC19) on the internal test cohort.
+* **Output:** Accuracy, AUC, ROC curves, and SHAP analysis for biomarker interpretation.
 
 ### `03_Evaluate_External_Validation_Cohort.py`
-* This script demonstrates the clinical generalizability of our findings. It evaluates the fixed WEDGE signature (PGC & DNMT1) and baseline models purely on the **independent external multi-center cohort**. It generates key clinical diagnostic metrics, including external ROC curves, PRF (Precision, Recall, F1) scores, and confusion matrices.
+* **Purpose:** Validate the fixed WEDGE signature (PGC & DNMT1) on an independent external multi-center cohort.
+* **Output:** External ROC curves, PRF scores, and confusion matrices.
 
-> ⚠️ **IMPORTANT WARNING FOR CODE EXECUTION**
-> The scripts provided above are primarily intended to showcase methodological transparency. They currently contain **hardcoded absolute local paths** (e.g., `H:/Proteomic/...`). 
-> If you wish to run these scripts locally using the unzipped `data_for_WEDGE` datasets, you **MUST** manually open the scripts and update all directory path variables (such as `path` and `SAVE_PATH`) to match your local machine's directory structure.
----
+### `04_Feature_combinations_for_Biomarker_Discovery.py`
+* **Purpose:** Systematically analyze all possible 3-protein combinations to evaluate biomarker discovery performance.
+* **Output:** Ranked list of optimal protein biomarker combinations.
+
+> **Note:** All scripts use **relative paths** based on the script location. Ensure the project directory structure remains unchanged when running locally.
+Run the WEDGE framework directly with the demo dataset:
+
+```bash
+# Step 1: Train WEDGE model and identify biomarkers
+python 01_0_Train_and_Interpret_WEDGE.py
+
+# Step 2: Evaluate on internal test cohort
+python 02_Evaluate_Internal_Test_Cohort.py
+
+# Step 3: Evaluate on external validation cohort
+python 03_Evaluate_External_Validation_Cohort.py
+
+# Step 4: Analyze feature combinations for biomarker discovery
+python 04_Feature_combinations_for_Biomarker_Discovery.py
+```
+
+Results will be saved in the `output/` directory.
+
+
+
 ### Model Evaluation (`Evaluation_of_WEDGE.py`)
+
 * **Usage:** Orchestrates data loading, model initialization, and testing across different folds and cohorts.
 * **Expected Output:** The script is designed to output a detailed evaluation matrix including **Accuracy**, **AUC**, **Sensitivity**, and **Specificity** for the GAS vs. HPV-CA classification task across internal and external validation cohorts.
 

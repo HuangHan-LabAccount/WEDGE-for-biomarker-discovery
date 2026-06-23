@@ -231,3 +231,11 @@ def evaluate_process(gene_combinations):
         shap_obj = explainer(X_test_scaled)
         shap.summary_plot(shap_obj, X_test_scaled, plot_type="bar")
         shap.summary_plot(shap_obj, X_test_scaled)
+
+# [166, 760, 479, 186, 631, 712, 790, 322, 543, 985, 837, 280, 170, 1081, 726, 420, 1082, 534, 489, 1005, 297, 471, 387, 238, 47, 520, 373, 283, 13, 428]
+# df.columns[best_all_features].values
+# ['SH3BGRL', 'FMO1', 'SMPDL3B', 'ANG', 'ABI3BP', 'TTC4', 'COL1A1',
+#        'H1-5', 'CTSH', 'PLA2G2A', 'F3', 'SPINK1', 'SERPINF1', 'CD6',
+#        'DES', 'NOLC1', 'SSX2IP', 'SAP30', 'ASRGL1', 'GNLY', 'CTR9',
+#        'NSL1', 'CSRP2', 'PHACTR4', 'LIG1', 'TACC3', 'TAX1BP3', 'MIS12',
+#        'GINS1', 'PHGDH']

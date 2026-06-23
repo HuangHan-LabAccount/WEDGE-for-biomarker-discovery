@@ -156,3 +156,38 @@ def evaluate_process(gene_combinations):
         shap_obj = explainer(X_test_scaled)
         shap.summary_plot(shap_obj, X_test_scaled, plot_type="bar")
         shap.summary_plot(shap_obj, X_test_scaled)
+
+
+# top_marker_genes
+# Out[250]:
+# GINS1     0.021299
+# DSN1      0.019065
+# NASP      0.017521
+# GINS3     0.016445
+# GINS4     0.015652
+# CDK2      0.015195
+# HAT1      0.014638
+# DUT       0.014322
+# DNAJC9    0.014153
+# MCM2      0.013375
+# MCM5      0.013373
+# UHRF1     0.013284
+# MCM4      0.013014
+# MCM7      0.012694
+# RFC4      0.012268
+# PCNA      0.011935
+# MCMBP     0.011546
+# RFC2      0.010990
+# CDK4      0.010764
+# CDK1      0.010673
+# GINS2     0.010539
+# STMN1     0.010401
+# RFC3      0.010140
+# MCM6      0.009883
+# RBBP7     0.009818
+# MCM3      0.009623
+# CDKN2A    0.009593
+# TYMS      0.009540
+# EXOSC5    0.009036
+# MSH2      0.008886
+# dtype: float64

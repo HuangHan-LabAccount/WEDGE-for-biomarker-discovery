@@ -141,5 +141,5 @@ def build_hetero_graph_dataset(matrix,adj_PPI,adj_GRN,labels):
 
     return dataset
 def DEgene_selected(matrix, path = "H:/Proteomic"):
-    DE_gene = pd.read_csv(f'{path}/data/DEG/HPV_EA_DEG_1.5.csv', index_col=0)
+    DE_gene = pd.read_csv(f'{path}/Data/DEG/HPV_EA_DEG_1.5.csv', index_col=0)
     return matrix.loc[:, DE_gene.x]

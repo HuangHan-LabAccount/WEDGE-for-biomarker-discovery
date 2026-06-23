@@ -8,10 +8,10 @@ import os
 import sys
 from pytorch_lightning.callbacks import EarlyStopping
 sys.path.append('lib/')
-def create_trainer(max_epochs=100,patience=10,min_delta=1e-4,
-                   accumulate_grad_batches=1,check_val_every_n_epoch=1,
-                   log_dir="lightning_logs",experiment_name="heterogcn",
-                   save_dir="checkpoints",**trainer_kwargs):
+def create_trainer(max_epochs=2000, min_epochs=200, patience=100, min_delta=1e-5,
+                   accumulate_grad_batches=1, check_val_every_n_epoch=1,
+                   log_dir="lightning_logs", experiment_name="heterogcn",
+                   save_dir="checkpoints", **trainer_kwargs):
     os.makedirs(save_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
 
@@ -27,7 +27,7 @@ def create_trainer(max_epochs=100,patience=10,min_delta=1e-4,
             filename='{epoch}-{val_total_loss:.4f}',
             monitor='val_total_loss',
             mode='min',
-            save_top_k=5,
+            save_top_k=10,
             save_last=True,
             verbose=True
         ),
@@ -46,6 +46,7 @@ def create_trainer(max_epochs=100,patience=10,min_delta=1e-4,
     # create trainer
     trainer = pl.Trainer(
         max_epochs=max_epochs,
+        min_epochs=min_epochs,
         callbacks=callbacks,
         logger=logger,
         accumulate_grad_batches=accumulate_grad_batches,
@@ -59,6 +60,5 @@ def create_trainer(max_epochs=100,patience=10,min_delta=1e-4,
     )
 
     return trainer
-
 
 

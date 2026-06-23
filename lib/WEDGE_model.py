@@ -9,12 +9,13 @@ from torch_geometric.nn import global_mean_pool, global_max_pool, GraphNorm
 class HeteroGCN(nn.Module):
     def __init__(self, c_in, c_hidden, c_out, dp_rate=0.5, dp_rate_linear=0.5, **kwargs):
         super().__init__()
-
+        self.feature_proj = nn.ModuleDict({
+            'protein': nn.Linear(c_in, 64),
+            'gene': nn.Linear(c_in, 64)
+        })
         self.conv1 = HeteroConv({
-            ('protein', 'interacts', 'protein'): GCNConv(c_in, c_hidden, add_self_loops=True),
-            ('gene', 'regulates', 'gene'): GCNConv(c_in, c_hidden, add_self_loops=True)
-            # ('protein', 'associates', 'gene'): GCNConv(c_in, c_hidden),
-            # ('gene', 'associates', 'protein'): GCNConv(c_in, c_hidden),
+            ('protein', 'interacts', 'protein'): GCNConv(64, c_hidden, add_self_loops=True),
+            ('gene', 'regulates', 'gene'): GCNConv(64, c_hidden, add_self_loops=True)
         })
 
         self.conv2 = HeteroConv({
@@ -60,8 +61,11 @@ class HeteroGCN(nn.Module):
                 'protein': torch.zeros(x_dict['protein'].size(0), dtype=torch.long, device=x_dict['protein'].device),
                 'gene': torch.zeros(x_dict['gene'].size(0), dtype=torch.long, device=x_dict['gene'].device)
             }
-
-        x_dict1 = self.conv1(x_dict, edge_index_dict)
+        x_dict_projected = {
+            node_type: F.relu(self.feature_proj[node_type](x))
+            for node_type, x in x_dict.items()
+        }
+        x_dict1 = self.conv1(x_dict_projected, edge_index_dict)
 
         x_dict1 = {
             node_type: self.norm_dict1[node_type](x, batch[node_type])
@@ -138,8 +142,8 @@ class GraphLevelHeteroGCN(pl.LightningModule):
 
         metrics = {}
         for prefix in ['protein', 'gene', 'combined']:
-            metrics[f'{prefix}_accuracy'] = torchmetrics.Accuracy(num_classes=c_out)
-            metrics[f'{prefix}_f1'] = torchmetrics.F1Score(num_classes=c_out, average='macro')
+            metrics[f'{prefix}_accuracy'] = torchmetrics.Accuracy(task='multiclass', num_classes=c_out)
+            metrics[f'{prefix}_f1'] = torchmetrics.F1Score(task='multiclass', num_classes=c_out, average='macro')
         self.metrics = nn.ModuleDict(metrics)
 
     def _compute_metrics(self, outputs, batch_y, stage):
