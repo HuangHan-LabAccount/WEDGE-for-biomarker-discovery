@@ -56,7 +56,7 @@ pip install -r lib/requirements.txt
 Due to the large file size of the raw mass spectrometry data, the complete dataset is hosted externally on the **iProX/ProteomeXchange** consortium:
 * **Project ID:** `IPX0013995000` / `PXD074127`
 * **Subproject ID:** `IPX0013995001`
-* **Access Link:** [iProX Repository](https://www.iprox.cn/page/PSV023.html;?url=1774021395032q4nj) 
+* **Access Link:** [iProX Repository](https://www.iprox.cn/page/PSV023.html;?url=1782219624318Pdxl) 
 * **Note:** Passwords for reviewer access are provided in the *Reporting Summary* submitted with the manuscript.
 
 ### Processed Data (Provided for Peer Review)
@@ -74,21 +74,15 @@ The WEDGE framework first employs **WGAN-GP** (Wasserstein Generative Adversaria
 ---
 The following scripts provide the complete implementation logic of the WEDGE framework as described in the manuscript. They are intended for methodological transparency and reference:
 
-### `01_Train_and_Interpret_WEDGE.py`
-* **Purpose:** Train the dual-stream Heterogeneous GCN and identify diagnostic biomarkers using Integrated Gradients.
-* **Output:** Identifies **PGC** and **DNMT1** as the top diagnostic biomarkers.
-
-### `02_Evaluate_Internal_Test_Cohort.py`
-* **Purpose:** Evaluate WEDGE and baseline models (Random Forest, DIABLO, BINN, POC19) on the internal test cohort.
-* **Output:** Accuracy, AUC, ROC curves, and SHAP analysis for biomarker interpretation.
-
-### `03_Evaluate_External_Validation_Cohort.py`
-* **Purpose:** Validate the fixed WEDGE signature (PGC & DNMT1) on an independent external multi-center cohort.
-* **Output:** External ROC curves, PRF scores, and confusion matrices.
-
-### `04_Feature_combinations_for_Biomarker_Discovery.py`
-* **Purpose:** Systematically analyze all possible 3-protein combinations to evaluate biomarker discovery performance.
-* **Output:** Ranked list of optimal protein biomarker combinations.
+| Script Name | Operational Purpose | Key Deliverables & Visual Metrics |
+| :--- | :--- | :--- |
+| **`00_WGAN-GP_for_Data_Augmentation.py`** | Trains conditional WGAN-GP networks using raw data subsets to generate high-fidelity synthetic protein expression values for target clinical classes (`HPV_related` / `NHPV`). | Outputs balanced pseudo-expression CSV matrices saved under the `Aug_data/` directory. |
+| **`00_Evaluation_of_Augdataset.py`** | Evaluates generative quality using **Fréchet Distance (FD Score)** compared to a statistical random baseline, alongside calculating 5-fold cross-validation accuracy metrics across the graph streams. | Generates FD score comparison charts (`fd_comparison.pdf`) and multi-stream accuracy bar plots (`accuracy_comparison.pdf`). |
+| **`01_0_Train_and_Interpret_WEDGE.py`** | Implements the end-to-end 5-fold cross-validation training loop of the `GraphLevelHeteroGCN` network. Applies **Integrated Gradients (IG)** node explanation to isolate key clinical features. | Generates candidate diagnostic markers ranking metrics and exports custom-colored vector charts for Top PPI/GRN scores. |
+| **`01_1_Visualization_of_WEDGE_loss(Train&Validation).py`** | Extracts and aggregates cross-validation training metrics from TensorBoard logs, employing **Exponential Moving Average (EMA) smoothing** to highlight foundational optimization patterns. | Exports multi-fold overlaid, publication-grade loss trend curves (`train_total_loss.pdf`, `val_total_loss.pdf`, etc.) into the figures module. |
+| **`01_2_Melt_WGAN_GP_Experient.py`** | Performs **MELT experiments** tracking inter-sample Pearson correlation trends and maps *Intra-class* vs *Inter-class* convergence trajectories. Executes full-cycle ablation training without data augmentation. | Produces comparative clustermaps, localized correlation KDE distribution graphs, and comparative ablation confusion matrices. |
+| **`02_Feature_Combination_Selection.py`** | Systematically reviews random feature blocks ranging across sizes from 3 to 10 nodes. Calculates recurrence distribution heatmaps and runs network-wide topology **Permutation Tests** utilizing `igraph`. | Generates combination score matrixes, occurrence frequency histograms, and null-distribution Z-score topology significance plots. |
+| **`03_Evaluate_Internal_Test_Cohort.py`** | Tests the signature scale-dependence (from 1 to 15 biomarkers) across standard models (WEDGE, BINN, POC19, RF, DIABLO) over internal test and independent multicenter external cohorts. | Produces diagnostic signature accuracy lines, ROC curves, PRF multi-class metrics, and local **SHAP Feature Importance** plots. |
 
 > **Note:** All scripts use **relative paths** based on the script location. Ensure the project directory structure remains unchanged when running locally.
 Run the WEDGE framework directly with the demo dataset:
