@@ -88,17 +88,26 @@ The following scripts provide the complete implementation logic of the WEDGE fra
 Run the WEDGE framework directly with the demo dataset:
 
 ```bash
-# Step 1: Train WEDGE model and identify biomarkers
+# Step 1: Run WGAN-GP data augmentation
+python 00_WGAN-GP_for_Data_Augmentation.py
+
+# Step 2: Evaluate data generation fidelity (FD metrics) and baseline accuracies
+python 00_Evaluation_of_Augdataset.py
+
+# Step 3: Train the WEDGE Heterogeneous GCN architecture and extract biomarker node importance scores 
 python 01_0_Train_and_Interpret_WEDGE.py
 
-# Step 2: Evaluate on internal test cohort
-python 02_Evaluate_Internal_Test_Cohort.py
+# Step 4: Extract and visualize EMA-smoothed Loss curves from log events
+python 01_1_Visualization_of_WEDGE_loss(Train&Validation).py
 
-# Step 3: Evaluate on external validation cohort
-python 03_Evaluate_External_Validation_Cohort.py
+# Step 5: Perform MELT correlation experiments and the non-augmented ablation study
+python 01_2_Melt_WGAN_GP_Experient.py
 
-# Step 4: Analyze feature combinations for biomarker discovery
-python 04_Feature_combinations_for_Biomarker_Discovery.py
+# Step 6: Run combinatorial screening and topological network permutation testing
+python 02_Feature_Combination_Selection.py
+
+# Step 7: Complete benchmarking validations across internal and multi-center external cohorts
+python 03_Evaluate_Internal_Test_Cohort.py
 ```
 
 Results will be saved in the `output/` directory.
